@@ -1,6 +1,6 @@
-const driver = require('../controllers/drivers_controller');
+const DriversController = require('../controllers/drivers_controller');
+
 module.exports = (app) => {
-    app.get('/api', (req,res) => {
-        driver.greeting(req,res);
-    });
+    app.get('/api', DriversController.greeting);
+   
 }

@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const DriverSchema = new Schema({
     email: {
         type: String,
-        required: true
+        required: true,
+        message: 'email is required'
     },
     driving: {
         type: Boolean,

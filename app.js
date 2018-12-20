@@ -13,4 +13,7 @@ true });
 app.use(bodyParser.json());
 routes(app);
 
+app.use((err, req, res, next) => {
+    res.status(422).send(err.message);
+});
 module.exports = app;

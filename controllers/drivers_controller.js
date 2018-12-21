@@ -28,5 +28,26 @@ module.exports = {
         Driver.findByIdAndDelete({_id: driverId})
         .then((driver) => res.status(204).send(driver))
         .catch(next);
+    },
+
+    index( req, res, next) {
+        const { lng, lat } = req.query;
+        // Driver.find(
+        //     {
+        //             geometry: {
+        //                type : "Point",
+        //                coordinates : [parseFloat(lng), parseFloat(lat)]
+        //             },
+        //          }
+        //  )
+        // Driver.find( { loc: { $geoWithin: { $centerSphere: [parseFloat(lng), parseFloat(lat)] } } } )
+        Driver.find({ geometry :
+            { $geoWithin :
+                { $geometry :
+                  { type : "Polygon" ,
+                    coordinates : [parseFloat(lng), parseFloat(lat)]
+           } } } } )
+            .then((drivers) => res.send(drivers))
+            .catch(next);
     }
 };

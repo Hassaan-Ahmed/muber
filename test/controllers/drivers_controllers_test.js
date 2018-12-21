@@ -5,13 +5,13 @@ const mongoose = require('mongoose');
 const Driver = mongoose.model('driver');
 describe('Creating a test setup for controllers', () => {
 
-    it('check if the ppst route is working', (done) => {
+    xit('check if the post route is working', (done) => {
         Driver.estimatedDocumentCount().then((count) => {
 
             request(app)
                 .post('/api/drivers')
                 .send({email: 'test@test.com'})
-                .end((error, response) => {
+                .end(() => {
                     Driver.estimatedDocumentCount().then((newCount) => {
                         assert(count + 1 === newCount);
                         done();
@@ -51,6 +51,37 @@ describe('Creating a test setup for controllers', () => {
                    assert(driver === null);
                    done();
                })                
+            });
+        });
+    });
+
+    it.only('get to /api/drivers find drivers around a specific location', (done) => {
+        const seattleDriver = new Driver ({
+            email: 'seattle@test.com',
+            geometry: { 
+                type: 'Point',
+                coordinates: [-122.4759902, 47.6147628 ],
+                name: 'Sea',
+                category: 'Medical',
+         },
+        });
+        const miamiDriver = new Driver ({
+            email: 'miami@test.com',
+            geometry: { 
+                type: 'Point',
+                coordinates: [-80.251, 25.791 ],
+                name: 'Miami',
+                category: 'Medical',
+         },
+        });
+
+        Promise.all([seattleDriver.save(), miamiDriver.save()])
+        .then(() => {
+            request(app)
+            .get('/api/drivers?lng=-80.2&lat=25.79')
+            .end((error,response) => {
+                console.log('response',response);
+                done();
             });
         });
     });
